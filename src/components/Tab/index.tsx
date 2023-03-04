@@ -12,7 +12,7 @@ interface TabPanelProps {
 
 interface BasicTabProps {
     data:{
-        children?: React.ReactNode;
+        component?: React.ReactElement;
         nameTab: string;
         iconOnTab?: React.ReactElement;
         value: number;
@@ -65,7 +65,7 @@ export default function BasicTabs(props: BasicTabProps) {
       </Box>
       {data.map(item => (
         <TabPanel key={item.value} value={value} index={item.value}>
-            {item.children}
+            {item.component}
         </TabPanel>
       ))}
     </Box>

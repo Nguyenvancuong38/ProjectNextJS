@@ -1,8 +1,8 @@
 function SignUp() {
     return (
-        <div className="text-[red]">
-            <p>fklajfa</p>
-        </div>
+        <>
+            <p className="text-[red]">Sign up</p>
+        </>
     )
 }
 

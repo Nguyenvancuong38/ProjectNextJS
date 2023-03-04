@@ -1,8 +1,8 @@
 function ShowInfor() {
     return (
-        <div className="text-[red]">
-            <p>jahfkafa</p>
-        </div>
+        <>
+            <p className="text-[red]">Show Information</p>
+        </>
     )
 }
 

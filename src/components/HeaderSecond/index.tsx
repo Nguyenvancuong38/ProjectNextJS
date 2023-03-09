@@ -1,7 +1,7 @@
 function HeaderSecond() {
     return (
         <div className="container">
-            Header Second 
+            <p className="text-[red]">HeaderSecond</p>
         </div>
     )
 }

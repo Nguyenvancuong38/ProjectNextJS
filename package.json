@@ -17,6 +17,7 @@
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.5",
     "@fontsource/roboto": "^4.5.8",
+    "@hookform/resolvers": "^2.9.11",
     "@next/bundle-analyzer": "^13.2.3",
     "@next/font": "13.1.1",
     "@prisma/client": "^4.11.0",
@@ -34,9 +35,12 @@
     "next-compose-plugins": "^2.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.5",
     "sass": "^1.57.1",
+    "sequelize": "^6.29.3",
     "styled-components": "^5.3.8",
-    "typescript": "4.9.4"
+    "typescript": "4.9.4",
+    "yup": "^1.0.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",

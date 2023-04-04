@@ -14,9 +14,10 @@ const styleOfButton = {
 }
 
 const SignUp: React.FC = () => {
-    const { handleSubmit, control } = useForm<formDataSignUp>({resolver: yupResolver(signUpSchema)})
+    const { handleSubmit, control, reset, formState: { errors } } = useForm<formDataSignUp>({resolver: yupResolver(signUpSchema)})
     const handleLogin = (value : any) => {
         console.log('value', value);
+        reset();
     }
 
     return (
@@ -31,6 +32,7 @@ const SignUp: React.FC = () => {
                         type="email"
                         className='h-10'
                     />
+                    {!!errors.email?.message && <p className='text-[red]'>{errors.email?.message}</p>}
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
@@ -42,6 +44,7 @@ const SignUp: React.FC = () => {
                         placeholder="Password"
                         className = "h-10"
                     />
+                    {!!errors.password?.message && <p className='text-[red]'>{errors.password?.message}</p>}
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
@@ -53,6 +56,7 @@ const SignUp: React.FC = () => {
                         placeholder="Confirm Password"
                         className = "h-10"
                     />
+                    {!!errors.confirmPassword?.message && <p className='text-[red]'>{errors.confirmPassword?.message}</p>}
                 </Form.Item>
     
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

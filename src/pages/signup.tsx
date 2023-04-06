@@ -7,6 +7,9 @@ import { useForm } from 'react-hook-form';
 import { formDataSignUp } from 'types/formData';
 import ButtonCommon from '@components/common/Button';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import router from 'next/router';
+import { ROUTE } from 'constants/router';
+import { signUp } from '@services/api-clients/auth';
 
 const styleOfButton = {
     background: "red",
@@ -15,14 +18,15 @@ const styleOfButton = {
 
 const SignUp: React.FC = () => {
     const { handleSubmit, control, reset, formState: { errors } } = useForm<formDataSignUp>({resolver: yupResolver(signUpSchema)})
-    const handleLogin = (value : any) => {
-        console.log('value', value);
+    const handleLogin = async (value : any) => {
+        await signUp(value);
+        router.push(ROUTE.SIGN_UP_SUCCESS);
         reset();
     }
 
     return (
         <div className='bg-[white] w-full h-[100vh] flex justify-center items-center'>
-            <form className='w-[400px]' onSubmit={handleSubmit(handleLogin)}>
+            <Form className='w-[400px]' onFinish={handleSubmit(handleLogin)}>
                 <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
                     <InputTextField 
                         name="email"
@@ -64,7 +68,7 @@ const SignUp: React.FC = () => {
                     Submit
                 </ButtonCommon>
                 </Form.Item>
-            </form>
+            </Form>
         </div>
     );
 }

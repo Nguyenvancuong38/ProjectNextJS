@@ -1,6 +1,6 @@
 import { Form } from 'antd';
 import { yupResolver } from "@hookform/resolvers/yup";
-import { signUpSchema } from 'libs/schemas';
+import { signUpSchema } from 'libs/validation/schemas';
 import InputTextField from '@components/common/InputTextField';
 import InputPasswordField from '@components/common/InputPasswordField';
 import { useForm } from 'react-hook-form';

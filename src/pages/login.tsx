@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Checkbox, Form } from 'antd';
 import { yupResolver } from "@hookform/resolvers/yup";
-import { signInSchema } from 'libs/schemas';
+import { signInSchema } from 'libs/validation/schemas';
 import InputTextField from '@components/common/InputTextField';
 import InputPasswordField from '@components/common/InputPasswordField';
 import { useForm } from 'react-hook-form';

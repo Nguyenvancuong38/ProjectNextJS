@@ -1,19 +1,36 @@
+import { useEffect, useState } from 'react';
+import { getData } from '@services/api-clients/getComment';
 import Head from 'next/head';
 import Layout from '@components/common/Layout';
-import { useEffect } from 'react';
-import { getData } from '@services/api-clients/getComment';
+import Tab from '@components/common/TabCommon';
+import Comment from '@components/CommentComponent';
+import Todo from '@components/TodosComponent';
 
 export default function SignupSuccess() {
+  const [data, setData] = useState<any>([]);
+    
     const fetchData =  async () => {
-        const data = await getData('comments');
-        console.log(data);
+        const dataAPI = await getData('comments');
+        setData(dataAPI.data);
     }
 
     useEffect(() => {
-        console.log("start");
         fetchData();
     }, [])
-    
+
+    const items = [
+      {
+        key: '1',
+        label: `Comments`,
+        children: <Comment data={data} />,
+      },
+      {
+        key: '2',
+        label: `Todos`,
+        children: <Todo/>,
+      },
+    ];
+
   return (
     <>
       <Head>
@@ -25,7 +42,7 @@ export default function SignupSuccess() {
       <main>
         <Layout>
           <div>
-
+            <Tab items={items} defaultActiveKey="1"/>
           </div>
         </Layout>
       </main>

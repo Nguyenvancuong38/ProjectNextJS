@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Checkbox, Form } from 'antd';
+import { Form } from 'antd';
+import route from 'next/router';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from 'libs/validation/schemas';
 import InputTextField from '@components/common/InputTextField';
@@ -8,6 +9,8 @@ import { useForm } from 'react-hook-form';
 import { formDataLogin } from 'types/formData';
 import ButtonCommon from '@components/common/Button';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { login } from '@services/api-clients/auth';
+import { ROUTE } from 'constants/router';
 
 const styleOfButton = {
     background: "red",
@@ -16,13 +19,24 @@ const styleOfButton = {
 
 const Login: React.FC = () => {
     const { handleSubmit, control } = useForm<formDataLogin>({resolver: yupResolver(signInSchema)})
-    const handleLogin = (value : any) => {
-        console.log('value', value);
+    const [errMsg, setErrMsg] = useState<any>(null);
+    const handleLogin = async (value : any) => {
+        try {
+            const formData = {
+                email: value.email,
+                password: value.password 
+            }
+            await login(formData);
+            route.push(ROUTE.INDEX);
+        } catch (error: any) {
+            const message = error.response?.data?.message || error.message;
+            setErrMsg(message);            
+        }
     }
 
     return (
         <div className='bg-[white] w-full h-[100vh] flex justify-center items-center'>
-            <form className='w-[400px]' onSubmit={handleSubmit(handleLogin)}>
+            <Form className='w-[400px]' onFinish={handleSubmit(handleLogin)}>
                 <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
                     <InputTextField 
                         name="email"
@@ -49,8 +63,13 @@ const Login: React.FC = () => {
                 <ButtonCommon type="primary" htmlType="submit" style={styleOfButton}>
                     Submit
                 </ButtonCommon>
+                
                 </Form.Item>
-            </form>
+
+                <Form.Item>
+                {!!errMsg && <p className='text-[red]'>{errMsg}</p>}
+                </Form.Item>
+            </Form>
         </div>
     );
 }

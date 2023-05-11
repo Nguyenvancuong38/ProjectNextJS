@@ -22,15 +22,13 @@ const SignUp: React.FC = () => {
     const [errMessage, setErrMessage] = useState(null);
     const onSubmit = async (value : any) => {
         try {
-            console.log(value);
-            
             const formData = {
                 email: value.email,
                 password: value.password,
                 role: "ADMIN"
             }
             await signUp(formData);
-            router.push(ROUTE.SIGN_UP_SUCCESS);
+            router.push(ROUTE.SIGN_IN);
             reset();
         } catch (err: any) {
             const message = err.response?.data?.message || err.message;

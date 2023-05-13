@@ -1,41 +1,48 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { compare } from 'bcryptjs';
+import { generateToken } from 'libs/token';
 import prisma from 'libs/prisma';
-import jwt from 'jsonwebtoken';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-const JWT_SECRET = process.env.JWT_SECRET || '';
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
+    return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { email, password } = req.body;
+  const { phone ,email, password } = req.body;
+  const emailOrPhone = email || phone;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            email: emailOrPhone
+          },
+          {
+            phone: emailOrPhone
+          }
+        ]
+      }
+    });
 
-  if (!user) {
-    res.status(401).json({ message: 'Invalid credentials' });
-    return;
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or phone or password' });
+    }
+
+    const isPasswordValid = await compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid email or phone or password' });
+    }
+
+    const token = generateToken(user.id);
+
+    return res.status(200).json({
+      message: 'Logged in successfully',
+      user: user,
+      token
+    });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
-
-  const isPasswordValid = password === user.password;
-
-  if (!isPasswordValid) {
-    res.status(401).json({ message: 'Invalid credentials' });
-    return;
-  }
-
-  const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
-    expiresIn: '1h',
-  });
-
-  res.status(200).json({ token });
 }

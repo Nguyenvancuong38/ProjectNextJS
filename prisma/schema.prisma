@@ -15,7 +15,7 @@ model User {
   firstName   String
   lastName    String 
   image       String?  
-  phone       String?
+  phone       String   @unique
   address     String?
   role        Role     @default(User)
   createdAt   DateTime @default(now())

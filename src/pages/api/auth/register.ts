@@ -22,7 +22,7 @@ export default async function signupHandler(
 
   // Validate request body
   if (!email || !password || !firstName || !lastName) {
-    res.status(400).json({ error: 'Email, password, firstName and lastName are required' });
+    res.status(400).json({ message: 'Email, password, firstName and lastName are required' });
     return;
   }
 
@@ -32,13 +32,13 @@ export default async function signupHandler(
   });
 
   if (existingUser) {
-    res.status(409).json({ error: 'email already exists' });
+    res.status(409).json({ message: 'Email already exists' });
     return;
   }
 
   // Validate email
   if (!validator.isEmail(email)) {
-    res.status(400).json({ error: 'Invalid email address' });
+    res.status(400).json({ message: 'Invalid email address' });
     return;
   }
 
@@ -51,7 +51,7 @@ export default async function signupHandler(
     !validator.matches(password, /[!@#$%^&*(),.?":{}|<>]/)
   ) {
     res.status(400).json({
-      error:
+      message:
         'Password must be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character',
     });
     return;
@@ -76,7 +76,6 @@ export default async function signupHandler(
 
     res.status(201).json({ token });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to create user' });
+    res.status(500).json({ message: 'Failed to create user' });
   }
 }

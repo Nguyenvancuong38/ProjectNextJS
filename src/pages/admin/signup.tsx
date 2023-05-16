@@ -20,17 +20,18 @@ const styleOfButton = {
 const SignUp: React.FC = () => {
     const { handleSubmit, control, reset, formState: { errors } } = useForm<formDataSignUp>({resolver: yupResolver(signUpSchema)})
     const [errMessage, setErrMessage] = useState(null);
-    const onSubmit = async (value : any) => {
+    const onSubmit = async (value : any) => {        
         try {
             const formData = {
-                email: value.email,
-                password: value.password,
-                role: "ADMIN"
+                ...value,
+                role: "Admin"
             }
             await signUp(formData);
-            router.push(ROUTE.SIGN_IN);
+            router.push(ROUTE.INDEX);
             reset();
         } catch (err: any) {
+            console.log(err);
+            
             const message = err.response?.data?.message || err.message;
             setErrMessage(message);
         }
@@ -44,11 +45,47 @@ const SignUp: React.FC = () => {
                         name="email"
                         control={control}
                         prefix={<UserOutlined className="site-form-item-icon" />}
-                        placeholder="Email"
+                        placeholder="Email..."
                         type="email"
                         className='h-10'
                     />
                     {!!errors.email?.message && <p className='text-[red]'>{errors.email?.message}</p>}
+                </Form.Item>
+
+                <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
+                    <InputTextField 
+                        name="phone"
+                        control={control}
+                        prefix={<UserOutlined className="site-form-item-icon" />}
+                        placeholder="Phone..."
+                        type="text"
+                        className='h-10'
+                    />
+                    {!!errors.phone?.message && <p className='text-[red]'>{errors.phone?.message}</p>}
+                </Form.Item>
+
+                <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
+                    <InputTextField 
+                        name="firstName"
+                        control={control}
+                        prefix={<UserOutlined className="site-form-item-icon" />}
+                        placeholder="First Name..."
+                        type="text"
+                        className='h-10'
+                    />
+                    {!!errors.firstName?.message && <p className='text-[red]'>{errors.firstName?.message}</p>}
+                </Form.Item>
+
+                <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
+                    <InputTextField 
+                        name="lastName"
+                        control={control}
+                        prefix={<UserOutlined className="site-form-item-icon" />}
+                        placeholder="Last Name..."
+                        type="text"
+                        className='h-10'
+                    />
+                    {!!errors.lastName?.message && <p className='text-[red]'>{errors.lastName?.message}</p>}
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
@@ -57,7 +94,7 @@ const SignUp: React.FC = () => {
                         control={control}
                         prefix={<LockOutlined className="site-form-item-icon" />}
                         type="password"
-                        placeholder="Password"
+                        placeholder="Password..."
                         className = "h-10"
                     />
                     {!!errors.password?.message && <p className='text-[red]'>{errors.password?.message}</p>}
@@ -69,7 +106,7 @@ const SignUp: React.FC = () => {
                         control={control}
                         prefix={<LockOutlined className="site-form-item-icon" />}
                         type="password"
-                        placeholder="Confirm Password"
+                        placeholder="Confirm Password..."
                         className = "h-10"
                     />
                     {!!errors.confirmPassword?.message && <p className='text-[red]'>{errors.confirmPassword?.message}</p>}

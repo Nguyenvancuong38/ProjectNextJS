@@ -12,6 +12,3 @@ export const login = async (values: any) => {
   const { data }: { data: IResponse } = await axiosInstance.post(APIs.LOGIN, values);
   return data.data;
 }
-
-// admin@gmail.com
-// cuongNv2105@

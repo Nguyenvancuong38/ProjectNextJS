@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form } from 'antd';
 import route from 'next/router';
+import { signIn } from 'next-auth/react';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from 'libs/validation/schemas';
 import InputTextField from '@components/common/InputTextField';
@@ -9,7 +10,6 @@ import { useForm } from 'react-hook-form';
 import { formDataLogin } from 'types/formData';
 import ButtonCommon from '@components/common/Button';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { login } from '@services/api-clients/auth';
 import { ROUTE } from 'constants/router';
 
 const styleOfButton = {
@@ -22,14 +22,19 @@ const Login: React.FC = () => {
     const [errMsg, setErrMsg] = useState<any>(null);
     const handleLogin = async (value : any) => {
         try {
-            const formData = {
+            const res = await signIn("credentials", {
+                redirect: false,
                 email: value.email,
                 password: value.password 
+            });
+
+            if(res?.error) {
+                setErrMsg(res.error);
+            } else {
+                route.push(ROUTE.INDEX);
             }
-            await login(formData);
-            route.push(ROUTE.INDEX);
         } catch (error: any) {
-            const message = error.response?.data?.message || error.message;
+            const message = error.response?.data?.error || error.message;
             setErrMsg(message);            
         }
     }
@@ -41,7 +46,7 @@ const Login: React.FC = () => {
                     <InputTextField 
                         name="email"
                         control={control}
-                        prefix={<UserOutlined className="site-form-item-icon" />}
+                        prefix={<UserOutlined className="site-form-item-icon" rev={undefined} />}
                         placeholder="Email"
                         type="email"
                         className='h-10'
@@ -52,7 +57,7 @@ const Login: React.FC = () => {
                     <InputPasswordField 
                         name='password'
                         control={control}
-                        prefix={<LockOutlined className="site-form-item-icon" />}
+                        prefix={<LockOutlined className="site-form-item-icon" rev={undefined} />}
                         type="password"
                         placeholder="Password"
                         className = "h-10"
